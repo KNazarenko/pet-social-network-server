@@ -4,25 +4,24 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const fs = require('fs');
+require('dotenv').config();
 
 const app = express();
-
-
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.set('view engine', 'jade');
-
-// Static files
+// Get static files from folder 'uploads'
 app.use('/uploads', express.static('uploads'))
-if (!fs.existsSync('/uploads')) {
-  fs.mkdirSync('uploads')
-}
+
 
 app.use('/api', require('./routes'))
 
+if (!fs.existsSync('uploads')) {
+  fs.mkdirSync('uploads')
+}
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
